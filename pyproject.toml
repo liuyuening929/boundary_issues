@@ -14,6 +14,7 @@ keywords = []
 license = { text = "BSD 3-Clause License" }
 authors = [
     { email = "yuening.liu@czbiohub.org ", name = "yuening_liu" },
+    { email = "dominikrobak7@gmail.com ", name = "Dominik Robak" },
     { email = "emk2237@columbia.edu ", name = "erika_kusaka"  }
 ]
 dynamic = ["version"]
