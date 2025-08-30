@@ -17,6 +17,8 @@ authors = [
     { email = "dominikrobak7@gmail.com ", name = "Dominik Robak" },
     { email = "emk2237@columbia.edu ", name = "erika_kusaka"  },
     { email = "madison.chlebowski@yahoo.com", name = "Madison_Chlebowski" },
+    { email = "tbasiashvili@ucsd.edu ", name = "tamar_basiashvili" },
+
 ]
 dynamic = ["version"]
 dependencies = [
