@@ -88,3 +88,10 @@ source setup.sh
   "dimension_separator" : "/",
   "zarr_format" : 2
 ```
+* Yuening's data:
+     *location:mnt/efs/aimbl_2025/student_data/S-YL
+     *image shape: (6, 2048, 2048), offset: (0, 0, 0)
+     *labels shae: (1, 2048, 2048), offset: (2, 0, 0)
+     *number of zarr files: 48
+     
+  
