@@ -40,7 +40,7 @@ source setup.sh
 * Mady's Data 
     * Location: /mnt/efs/aimbl_2025/student_data/S-MC
 20 z-stack files of interest for each time point (4dpf_zarrconversion folder is priority)
-
+```
   "multiscales" : [ {
     "metadata" : {
       "method" : "loci.common.image.SimpleImageScaler",
@@ -87,3 +87,4 @@ source setup.sh
   "shape" : [ 1, 3, 110, 2048, 2048 ],
   "dimension_separator" : "/",
   "zarr_format" : 2
+```
