@@ -1,12 +1,11 @@
 # boundary_issues
 
-## Getting Started
+## Setting up environment  
 
-Create a new environment
+In boundary_issues/ run
+
 ```bash
-conda create -n boundary_issues python=3.11
-conda activate 3.11
-pip install -e .
+source setup.sh
 ```
 
 ##### Dataset Information

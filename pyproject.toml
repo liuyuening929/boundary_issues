@@ -22,5 +22,20 @@ authors = [
 ]
 dynamic = ["version"]
 dependencies = [
-    # Add your requirements here
+    "numpy",
+    "scipy",
+    "scikit-image",
+    "imageio",
+    "matplotlib",
+    "zarr",
+    "ome-zarr",                       
+    "jupyter",
+    "ipykernel",
+    "jupytext",
+    "tensorboard",
+    "black",
+    "pytest",
+    "torch",                          
+    "torchvision",                    
+    "bootstrapper @ git+https://github.com/ucsdmanorlab/bootstrapper.git",
 ]
