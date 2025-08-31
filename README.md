@@ -11,8 +11,8 @@ pip install -e .
 
 ##### Dataset Information
 * Dominik's data
-Location: /mnt/efs/aimbl_2025/student_data/S-DR
-22 .zarr files of structure
+    * Location: /mnt/efs/aimbl_2025/student_data/S-DR  
+22 .zarr files of structure  
 ```
 /mnt/efs/aimbl_2025/student_data/S-DR/puncta_x100_1_2.zarr [zgroup]
  - version: 0.4
@@ -34,7 +34,7 @@ Location: /mnt/efs/aimbl_2025/student_data/S-DR
  - data
    - (268, 2304, 2304)
 ```
-ch0 (488) - NMIIC
-ch1 (569) - Phalloidin (F-actin)
-ch2 (647) - ZO-1 ab
-* 
+    ch0 (488) - NMIIC  
+    ch1 (569) - Phalloidin (F-actin)  
+    ch2 (647) - ZO-1 ab  
+*   
