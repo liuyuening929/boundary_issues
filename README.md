@@ -39,7 +39,7 @@ source setup.sh
 
 * Mady's Data 
     * Location: /mnt/efs/aimbl_2025/student_data/S-MC
-20 z-stack files of interest for each time point (4dpf_zarrconversion folder is priority)
+    * 20 z-stack files of interest for each time point (4dpf_zarrconversion folder is priority)
 ```
   "multiscales" : [ {
     "metadata" : {
