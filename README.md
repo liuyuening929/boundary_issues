@@ -36,12 +36,11 @@ source setup.sh
     ch0 (488) - NMIIC  
     ch1 (569) - Phalloidin (F-actin)  
     ch2 (647) - ZO-1 ab  
-*   
 
 * Mady's Data 
-    * location: /mnt/efs/aimbl_2025/student_data/S-MC
-2 folders of importance with 20 z-stacks each (priority is 4dpf zarr conversion folder, then 2.5dpf)
-
+    * Location: /mnt/efs/aimbl_2025/student_data/S-MC
+    * 20 z-stack files of interest for each time point (4dpf_zarrconversion folder is priority)
+```
   "multiscales" : [ {
     "metadata" : {
       "method" : "loci.common.image.SimpleImageScaler",
@@ -88,3 +87,12 @@ source setup.sh
   "shape" : [ 1, 3, 110, 2048, 2048 ],
   "dimension_separator" : "/",
   "zarr_format" : 2
+```
+* Yuening's data:
+     *location:mnt/efs/aimbl_2025/student_data/S-YL
+  ```
+     image shape: (6, 2048, 2048), offset: (0, 0, 0)
+     labels shae: (1, 2048, 2048), offset: (2, 0, 0)
+     number of zarr files: 48
+  ```
+  
