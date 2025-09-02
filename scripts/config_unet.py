@@ -1,11 +1,11 @@
 # from funlib.learn.torch.models.unet import UNet
-from boundary_issues.model import UNet
+from boundary_issues.unet import UNet
 import torch
 import numpy as np
 
-model = UNet(
+model = torch.nn.Sequential(UNet(
     in_channels=1,
-    num_fmaps=64,
+    num_fmaps=16,
     fmap_inc_factor=3,
     downsample_factors=[
         [1, 2, 2],  
@@ -16,9 +16,11 @@ model = UNet(
     padding=("same", "valid", "valid"),
     voxel_size=(1000, 170, 170),
     fov=(1, 1, 1),  
-    num_fmaps_out=3,
+    num_fmaps_out=None,
     constant_upsample=True
-)
+), torch.nn.Conv3d(in_channels = 16, out_channels= 6, kernel_size=(1,1,1)),torch.nn.Sigmoid())
+
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model= model.to(device)
 # Create a dummy input array with the shape (1, 1, 1000, 170, 170)
