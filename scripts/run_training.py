@@ -13,7 +13,9 @@ if __name__ == "__main__":
         raw_path="/mnt/efs/aimbl_2025/student_data/S-EK/EK_transfer/GT_movie1/crop_1_1.zarr/raw",
         labels_path="/mnt/efs/aimbl_2025/student_data/S-EK/EK_transfer/GT_movie1/crop_1_1.zarr/labels",
         mask_path="/mnt/efs/aimbl_2025/student_data/S-EK/EK_transfer/GT_movie1/crop_1_1.zarr/mask",
-        iterations=10,
-        snapshots_every=5,
-        save_every=5
+        iterations=5001,
+        snapshots_every=500,
+        save_every=500,
     )
+
+## run this script from your folder in the boundary_issues from the mnt
