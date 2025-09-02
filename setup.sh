@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create environment name based on the exercise name
-conda create -n boundary_issues python=3.11 -y
+conda create -n boundary_issues python=3.12 -y
 conda activate boundary_issues
 # Install additional requirements
 if [[ "$CONDA_DEFAULT_ENV" == "boundary_issues" ]]; then

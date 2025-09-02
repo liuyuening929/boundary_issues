@@ -36,4 +36,72 @@ source setup.sh
     ch0 (488) - NMIIC  
     ch1 (569) - Phalloidin (F-actin)  
     ch2 (647) - ZO-1 ab  
-*   
+
+* Mady's Data 
+    * Location: /mnt/efs/aimbl_2025/student_data/S-MC
+    * 20 z-stack files of interest for each time point (4dpf_zarrconversion folder is priority)
+```
+  "multiscales" : [ {
+    "metadata" : {
+      "method" : "loci.common.image.SimpleImageScaler",
+      "version" : "Bio-Formats 7.3.1"
+    },
+    "axes" : [ {
+      "name" : "t",
+      "type" : "time"
+    }, {
+      "name" : "c",
+      "type" : "channel"
+    }, {
+      "unit" : "micrometer",
+      "name" : "z",
+      "type" : "space"
+    }, {
+      "unit" : "micrometer",
+      "name" : "y",
+      "type" : "space"
+    }, {
+      "unit" : "micrometer",
+      "name" : "x",
+      "type" : "space"
+    } ],
+    "name" : "250627_93a_4dpf_nm4_em1_001_WellA01_ChannelX_Seq0000.nd2",
+    "datasets" : [ {
+      "path" : "0",
+      "coordinateTransformations" : [ {
+        "scale" : [ 1.0, 1.0, 0.3, 0.108333333333333, 0.108333333333333 ],
+        "type" : "scale"
+
+  "chunks" : [ 1, 1, 1, 1024, 1024 ],
+  "compressor" : {
+    "clevel" : 5,
+    "blocksize" : 0,
+    "shuffle" : 1,
+    "cname" : "lz4",
+    "id" : "blosc"
+  },
+  "dtype" : ">u2",
+  "fill_value" : 0,
+  "filters" : null,
+  "order" : "C",
+  "shape" : [ 1, 3, 110, 2048, 2048 ],
+  "dimension_separator" : "/",
+  "zarr_format" : 2
+```
+* Yuening's data:
+     *location:mnt/efs/aimbl_2025/student_data/S-YL
+  ```
+     image shape: (6, 2048, 2048), offset: (0, 0, 0)
+     labels shae: (1, 2048, 2048), offset: (2, 0, 0)
+     number of zarr files: 48
+  ```
+  
+* Erika's data:
+     *location:mnt/efs/aimbl_2025/student_data/S-EK
+  ```
+  training data folder: EK_transfer/GT_movie1
+  training was done on crop_1_1.zarr
+     image shape: (1, 36, 1492, 1492), offset: (0, 0, 0, 0)
+     labels shape: (1, 16, 1492, 1492), offset: (0, 15, 0, 0) --> spans 15:31
+  ```
+  
