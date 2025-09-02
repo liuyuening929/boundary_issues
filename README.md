@@ -102,6 +102,6 @@ source setup.sh
   training data folder: EK_transfer/GT_movie1
   training was done on crop_1_1.zarr
      image shape: (1, 36, 1492, 1492), offset: (0, 0, 0, 0)
-     labels shape: (1, 16, 1492, 1492), offset: (0, 15, 0, 0)
+     labels shape: (1, 16, 1492, 1492), offset: (0, 15, 0, 0) --> spans 15:31
   ```
   
