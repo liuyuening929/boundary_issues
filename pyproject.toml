@@ -39,3 +39,6 @@ dependencies = [
     "torchvision",                    
     "bootstrapper @ git+https://github.com/ucsdmanorlab/bootstrapper.git",
 ]
+
+  [project.scripts]
+  split-imod-txt = "boundary_issues.data_utils.imod:split"
