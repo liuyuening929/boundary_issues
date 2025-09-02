@@ -13,7 +13,7 @@ model = torch.nn.Sequential(UNet(
     ],
     kernel_size_down=[[(1, 3, 3), (1, 3, 3)],[(1, 3, 3), (1, 3, 3)],[(3, 3, 3), (3, 3, 3)]],
     kernel_size_up=[[(3, 3, 3), (3, 3, 3),(3, 3, 3)],[(3, 3, 3), (3, 3, 3), (3, 3, 3)]],
-    padding=("same", "valid", "valid"),
+    padding=("valid", "valid", "valid"),
     voxel_size=(1000, 170, 170),
     fov=(1, 1, 1),  
     num_fmaps_out=None,
