@@ -5,15 +5,15 @@ class WeightedLoss(torch.nn.Module):
         super(WeightedLoss, self).__init__()
         self.method = method
 
-    def _calc_loss(self, pred, target, mask):
+    def _calc_loss(self, pred, target, weight):
 
         if self.method == 'mse':
 
             err = (pred - target) ** 2
-            scale = mask * err
+            scale = weight * err # this is a weighted error - will mask px that are 0 and apply a weight everywhere else
 
             if len(torch.nonzero(scale)) != 0:
-                pixels_that_are_not_zero = torch.masked_select(scale, torch.gt(mask, 0))
+                pixels_that_are_not_zero = torch.masked_select(scale, torch.gt(weight, 0)) # just calculating the mean from the px that are non-zero
                 loss = torch.mean(pixels_that_are_not_zero)
             else:
                 loss = torch.mean(scale)
