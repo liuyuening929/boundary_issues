@@ -11,8 +11,8 @@ from boundary_issues.loss import WeightedLoss
 
 def predict(model: torch.nn.Module,
           raw_path: str,
-          input_size,
-          output_size,
+          input_shape,
+          output_shape,
           output_zarr:str,
           output_dataset: str,
           checkpoint_path: str,
@@ -24,8 +24,8 @@ def predict(model: torch.nn.Module,
     Args:
         model: The model to train
         raw_path: Path to the raw data
-        input_size: Input size for the network (voxels)
-        output_size: Output size for the network (voxels)
+        input_shape: Input size for the network (voxels)
+        output_shape: Output size for the network (voxels)
         checkpoint_path: Path to the model checkpoint
         output_path: Path to save the output
         neighborhood: Neighborhood for the affinities
@@ -48,7 +48,7 @@ def predict(model: torch.nn.Module,
         axis_names=['c^', *raw_array.axis_names],
         units=raw_array.units,
         dtype=np.float32,
-        chunk_shape=(len(neighborhood), *output_size)
+        chunk_shape=(len(neighborhood), *output_shape)
     )
 
     # creating "pipeline" consisting only of a data source
@@ -60,15 +60,16 @@ def predict(model: torch.nn.Module,
 
     # Scan node##### Check the parameters here too #####
     scan_request = gp.BatchRequest()
-    scan_request.add(raw, gp.Coordinate(input_size) * raw_array.voxel_size)
-    scan_request.add(prediction, gp.Coordinate(output_size) * raw_array.voxel_size)
+    scan_request.add(raw, gp.Coordinate(input_shape) * raw_array.voxel_size)
+    scan_request.add(prediction, gp.Coordinate(output_shape) * raw_array.voxel_size)
     scan_node= gp.Scan(
         scan_request,
         num_workers=1,
     )
 
     # setting up pad nodes for x and y ### check parameters here too #####
-    pad = gp.Pad(raw, None) 
+    padding = (gp.Coordinate(input_shape) * raw_array.voxel_size - gp.Coordinate(output_shape) * raw_array.voxel_size) // 2
+    pad = gp.Pad(raw, padding)
 
     # setting up normalization node
     normalization = gp.Normalize(array= raw)
