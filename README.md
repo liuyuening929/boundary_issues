@@ -104,4 +104,3 @@ source setup.sh
      image shape: (1, 36, 1492, 1492), offset: (0, 0, 0, 0)
      labels shape: (1, 16, 1492, 1492), offset: (0, 15, 0, 0) --> spans 15:31
   ```
-  
