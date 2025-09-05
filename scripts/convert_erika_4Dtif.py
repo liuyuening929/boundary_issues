@@ -5,7 +5,7 @@ from tqdm import tqdm
 import numpy as np
 from tifffile import imread
 from scipy.ndimage import find_objects
-from funlib.persistence import prepare_ome_ds
+from funlib.persistence import prepare_ds
 from funlib.geometry import Coordinate, Roi
 import logging
 from pathlib import Path
@@ -171,17 +171,14 @@ def convert(
         internal_path = ""
 
     logging.info(f"Zarr root: {zarr_root}, internal path: {internal_path}")
-    out_ds = prepare_ome_ds(
-        Path(zarr_root),
-        internal_path,
+    out_ds = prepare_ds(
+        out_array,
         shape=shape,
         offset=total_roi.offset,
         voxel_size=voxel_size,
         dtype=dtype,
         axis_names=axis_names,
         units=units,
-        types=types,
-        mode="w"
     )
 
     print(f"Writing {out_array}")
