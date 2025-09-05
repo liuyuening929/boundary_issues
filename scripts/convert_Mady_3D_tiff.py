@@ -99,14 +99,17 @@ def read_from(in_path):
     show_default=True,
     help="Physical units of the axes (space-separated strings)",
 )
+
 @click.option(
-    "--types", "-t",
-    type=str,
+    "--types",
+    "-t",
     nargs=3,
+    type=str,
     default=("space", "space", "space"),
     show_default=True,
-    help="Dimension types",
+    help="Dimension types"
 )
+
 @click.option("--crop", "-c", is_flag=True, help="Perform bounding box crop")
 def convert(
     in_path, out_array, dtype, voxel_size, voxel_offset, axis_names, units, types, crop
@@ -117,7 +120,7 @@ def convert(
     logging.info(
         f"Loading {'directory' if os.path.isdir(in_path) else 'image'}: {in_path}"
     )
-    full_array = read_from(in_path)[0]
+    full_array = read_from(in_path)
 
     shape = full_array.shape
     logging.info(f"Total voxel shape: {shape}, voxel offset: {voxel_offset}")
@@ -179,6 +182,7 @@ def convert(
         dtype=dtype,
         axis_names=axis_names,
         units=units,
+        #mode="w"
     )
 
     print(f"Writing {out_array}")

@@ -1,0 +1,4 @@
+data_path: "/mnt/efs/aimbl_2025/student_data/S-MC/Chlebowski_Mady_AIMBL2025/250627_4dpf_zarrreconstruction/reconstruction_250627_93a_4dpf_nm4_em1_001_WellA01_ChannelX_Seq0000.zarr"
+channel_names: -1
+num_workers: 5
+block_size: 32

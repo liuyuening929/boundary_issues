@@ -67,7 +67,8 @@ class Downsample(torch.nn.Module):
         self.down = pool(downsample_factor, stride=downsample_factor)
 
     def forward(self, x):
-        for d in range(1, self.dims + 1):
+        for d in range(1
+                       , self.dims + 1):
             if x.size()[-d] % self.downsample_factor[-d] != 0:
                 raise RuntimeError(
                     "Can not downsample shape %s with factor %s, mismatch "

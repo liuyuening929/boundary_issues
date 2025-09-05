@@ -16,3 +16,5 @@ def launch_tensorboard(log_dir):
     return process
 
 tensorboard_process = launch_tensorboard("training_logs")
+
+## run this script from your folder in the boundary_issues from the mnt
