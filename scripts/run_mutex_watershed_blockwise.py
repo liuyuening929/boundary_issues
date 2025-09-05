@@ -30,8 +30,8 @@ if __name__ == "__main__":
             Coordinate(0, 1, 0),
             Coordinate(0, 0, 1),
             Coordinate(2, 0, 0),
-            Coordinate(0, 8, 0),
-            Coordinate(0, 0, 8),
+            Coordinate(0, 5, 0),
+            Coordinate(0, 0, 5),
         ],
     )
 

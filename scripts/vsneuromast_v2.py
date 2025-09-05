@@ -13,14 +13,14 @@ from plot import plot_vs_n_fluor
 # %%
 if __name__ == "__main__":
     # TODO: modify the path to the downloaded dataset
-    input_data_path = "/mnt/efs/aimbl_2025/student_data/S-MC/Chlebowski_Mady_AIMBL2025/250627_4dpf_zarrreconstruction/reconstruction_250627_93a_4dpf_nm4_em1_001_WellA01_ChannelX_Seq0000.zarr"
+    input_data_path = "/mnt/efs/aimbl_2025/student_data/S-MC/Chlebowski_Mady_AIMBL2025/250627_4dpf_zarrreconstruction/reconstruction_250627_93a_4dpf_nm4_em7_007_WellA01_ChannelX_Seq0000.zarr"
     # input_data_path = "/mnt/efs/aimbl_2025/S-MC/neuromast_demo/20230803_fish2_60x_1_cropped_zyx_resampled_clipped_2.zarr"
     # TODO: modify the path to the downloaded checkpoint
     model_ckpt_path = "/mnt/efs/aimbl_2025/TA-EH/epoch=1-step=1012.ckpt"
 
     # TODO: modify the path
     # Zarr store to save the predictions
-    output_path = "/mnt/efs/aimbl_2025/S-MC/neuromast_demo/250627_4dpf_em1_vsneuromastV2.zarr"
+    output_path = "/mnt/efs/aimbl_2025/S-MC/neuromast_demo/250627_4dpf_em7_vsneuromastV2.zarr"
 
     # TODO: Choose an FOV
     # FOV of interest

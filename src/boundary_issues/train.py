@@ -10,11 +10,11 @@ from boundary_issues.loss import WeightedLoss
 def train(model: torch.nn.Module,
           loss: torch.nn.Module,
           optimizer: torch.optim.Optimizer,
-          raw_path: str,
-          labels_path: str,
-          mask_path: str,
           input_size,
           output_size,
+          zarr_roots= ["/mnt/efs/aimbl_2025/","/mnt/efs/aimbl_2025/student_data/S-EK/EK_transfer/GT_movie1/crop_2.zarr"],
+        #   labels_path: str,
+        #   mask_path: str,
           iterations = 5000,
           batch_size = 1,
           neighborhood = [(1, 0 ,0), (0, 1, 0), (0, 0, 1),(2, 0, 0),(0, 5, 0),(0, 0, 5)],
@@ -58,34 +58,49 @@ def train(model: torch.nn.Module,
     prediction = gp.ArrayKey('PREDICT')
     aff_scale= gp.ArrayKey("SCALE")
 
-    # loading files from paths
-    raw_array = open_ds(raw_path)
-    labels_array = open_ds(labels_path)
-    mask_array = open_ds(mask_path)
 
-    # creating "pipeline" consisting only of a data source
-    source_raw = gp.ArraySource( key= raw, array= raw_array, interpolatable= True)
-    source_labels = gp.ArraySource( key= labels, array= labels_array, interpolatable= False)
-    source_mask = gp.ArraySource( key= mask, array= mask_array, interpolatable= False)
+    # # loading files from paths
+    # raw_array = open_ds(raw_path)
+    # labels_array = open_ds(labels_path)
+    # mask_array = open_ds(mask_path)
+
+    # # creating "pipeline" consisting only of a data source
+    # source_raw = gp.ArraySource( key= raw, array= raw_array, interpolatable= True)
+    # source_labels = gp.ArraySource( key= labels, array= labels_array, interpolatable= False)
+    # source_mask = gp.ArraySource( key= mask, array= mask_array, interpolatable= False)
 
     ####################
     # SETTING UP NODES #
     ####################
 
     # setting up random location nodes
-    random_location = gp.RandomLocation(min_masked=percent_covered,mask=mask)
+    # random_location = gp.RandomLocation(min_masked=percent_covered,mask=mask)
 
     # setting up pad nodes
-    padding_amount = max(t[0] for t in neighborhood)*raw_array.voxel_size[0]
-    pad_label=gp.Pad(labels, size= (padding_amount,0,0))
-    pad_mask=gp.Pad(mask, size= (padding_amount,0,0))
+    # pad_label=gp.Pad(labels, size= (padding_amount,0,0))
+    # pad_mask=gp.Pad(mask, size= (padding_amount,0,0))
+    merged_src=[]
 
+    for zarr in zarr_roots:
+        zarr_raw = open_ds(f"{zarr}/raw") ##change name if needed
+        zarr_labels = open_ds(f"{zarr}/label") ##change name if needed
+        zarr_mask = open_ds(f"{zarr}/mask") ##change name if needed
+        source_raw = gp.ArraySource( key= raw, array= zarr_raw, interpolatable= True)
+        source_labels = gp.ArraySource( key= labels, array= zarr_labels, interpolatable= False)
+        source_mask = gp.ArraySource( key= mask, array= zarr_mask, interpolatable= False)
+        padding_amount = max(t[0] for t in neighborhood)*zarr_raw.voxel_size[0]
+
+        merged_sources = (source_raw , source_labels , source_mask) + gp.MergeProvider()+ gp.Pad(labels, size= (padding_amount,0,0)) + gp.Pad(mask, size= (padding_amount,0,0)) + gp.RandomLocation(min_masked=percent_covered,mask=mask)
+
+        merged_src.append(merged_sources)
+    merged_src = tuple(merged_src)
+    print(merged_src)
     # setting up normalization node
     normalization = gp.Normalize(array= raw)
 
     # setting up deformation node
-    deform_pt_space_wc = gp.Coordinate(deform_pt_space) * gp.Coordinate(raw_array.voxel_size[1:])
-    jitter_sigma_space_wc = gp.Coordinate(jitter_sigma) * gp.Coordinate(raw_array.voxel_size[1:])
+    deform_pt_space_wc = gp.Coordinate(deform_pt_space) * gp.Coordinate(zarr_raw.voxel_size[1:])
+    jitter_sigma_space_wc = gp.Coordinate(jitter_sigma) * gp.Coordinate(zarr_raw.voxel_size[1:])
     deform = gp.DeformAugment(deform_pt_space_wc, jitter_sigma_space_wc, spatial_dims=2)
 
     # setting up affinities node
@@ -127,14 +142,8 @@ def train(model: torch.nn.Module,
     # SETTING UP PIPELINE #
     ######################
 
-    pipeline = (
-        source_raw,
-        source_labels,
-        source_mask
-    ) + gp.MergeProvider() 
-    pipeline += pad_label
-    pipeline += pad_mask
-    pipeline += random_location 
+    pipeline = merged_src
+    pipeline += gp.RandomProvider()
     pipeline += normalization 
     pipeline += gp.SimpleAugment(transpose_only=[1,2]) 
     pipeline += deform 
@@ -150,8 +159,8 @@ def train(model: torch.nn.Module,
     
 
     # formulating a request for "raw"
-    input_size = gp.Coordinate(input_size) * raw_array.voxel_size
-    output_size = gp.Coordinate(output_size) * raw_array.voxel_size
+    input_size = gp.Coordinate(input_size) * zarr_raw.voxel_size
+    output_size = gp.Coordinate(output_size) * zarr_raw.voxel_size
 
     request = gp.BatchRequest()
 
