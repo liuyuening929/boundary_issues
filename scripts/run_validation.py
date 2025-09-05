@@ -35,14 +35,10 @@ def run_val_no_mask(prediction_arr, gt_arr):
     m = evaluate_fl.rand_voi(pred_np_array, gt_np_array)
     voi_merge = m['voi_merge']
     voi_split = m['voi_split']
-    voi_total = m['voi_total']
 
     #####
 
-    print(f"Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}, VOI merge: {voi_merge}, VOI split: {voi_split}, VOI total: {voi_total}")
-
-
-    print(f"Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}")
+    print(f"Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}, VOI merge: {voi_merge}, VOI split: {voi_split}")
 
 
 def run_val_maskcrop(prediction_arr, gt_arr, mask_arr, offset = (15,31)):
@@ -82,11 +78,10 @@ def run_val_maskcrop(prediction_arr, gt_arr, mask_arr, offset = (15,31)):
     m = evaluate_fl.rand_voi(adapted_pred, gt_np_array)
     voi_merge = m['voi_merge']
     voi_split = m['voi_split']
-    voi_total = m['voi_total']
 
     #####
 
-    print(f"Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}, VOI merge: {voi_merge}, VOI split: {voi_split}, VOI total: {voi_total}")
+    print(f"Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}, VOI merge: {voi_merge}, VOI split: {voi_split}")
 
 
 
