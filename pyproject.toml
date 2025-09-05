@@ -33,6 +33,7 @@ dependencies = [
     "ipykernel",
     "jupytext",
     "tensorboard",
+    "torchview",
     "black",
     "pytest",
     "torch",                          
