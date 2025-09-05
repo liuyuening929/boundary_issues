@@ -24,9 +24,21 @@ def run_val_no_mask(prediction_arr, gt_arr):
     
     gt_zarr = zarr.open(gt_path, mode='r')
     gt_np_array = gt_zarr[:]
-
     
     precision, recall, accuracy = evaluate(gt_np_array, pred_np_array)
+
+    #####
+    # Also check voi
+    m = evaluate.rand_voi(pred_np_array, gt_np_array)
+    voi_merge = m['voi_merge']
+    voi_split = m['voi_split']
+    voi_total = m['voi_total']
+
+    #####
+
+    print(f"Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}, VOI merge: {voi_merge}, VOI split: {voi_split}, VOI total: {voi_total}")
+
+
     print(f"Precision: {precision}, Recall: {recall}, Accuracy: {accuracy}")
 
 
