@@ -6,6 +6,7 @@ import numpy as np
 import sys
 sys.path.append("src")   # add src/ to Python path
 from boundary_issues.loss import WeightedLoss
+# from boundary_issues.grow_labels import GrowLabels
 
 def train(model: torch.nn.Module,
           loss: torch.nn.Module,
@@ -16,13 +17,13 @@ def train(model: torch.nn.Module,
           input_size,
           output_size,
           iterations = 5000,
-          batch_size = 1,
+          batch_size = 4,
           neighborhood = [(1, 0 ,0), (0, 1, 0), (0, 0, 1),(2, 0, 0),(0, 5, 0),(0, 0, 5)],
           snapshots_every = 1000,
           save_every = 1000,
           deform_pt_space = (30, 30),
           jitter_sigma = (2, 2),
-          percent_covered = 0.8,
+          percent_covered = 0.5,
           ):
 
     """ train the model
@@ -101,7 +102,7 @@ def train(model: torch.nn.Module,
     intensity_augment = gp.IntensityAugment(array=raw, scale_min=0.9, scale_max=1.1, shift_min=-0.1, shift_max=0.1, z_section_wise=False, clip=True) # Please set z_section_wise according to your data set
 
     # setting up noise node
-    noise = gp.NoiseAugment(array=raw, mode='Gaussian', clip=True)
+    # noise = gp.NoiseAugment(array=raw, mode='Gaussian', clip=True)
 
     # setting up snapshot node
     snapshot = gp.Snapshot(every = snapshots_every,
@@ -139,7 +140,8 @@ def train(model: torch.nn.Module,
     pipeline += gp.SimpleAugment(transpose_only=[1,2]) 
     pipeline += deform 
     pipeline += intensity_augment
-    pipeline += noise
+    # pipeline += noise
+    # pipeline += GrowLabels(labels, steps=5, only_xy=True)
     pipeline += add_affs
     pipeline += balanced_labels 
     pipeline += gp.Unsqueeze([raw],0)

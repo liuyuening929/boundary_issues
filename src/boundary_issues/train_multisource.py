@@ -14,7 +14,7 @@ def train(model: torch.nn.Module,
           output_size,
           zarr_roots,
           iterations = 5000,
-          batch_size = 1,
+          batch_size = 10,
           neighborhood = [(1, 0 ,0), (0, 1, 0), (0, 0, 1),(2, 0, 0),(0, 5, 0),(0, 0, 5)],
           snapshots_every = 1000,
           save_every = 1000,
@@ -62,17 +62,17 @@ def train(model: torch.nn.Module,
     for zarr in zarr_roots:
         zarr_raw = open_ds(f"{zarr}/raw") ##change name if needed
         zarr_labels = open_ds(f"{zarr}/labels") ##change name if needed
-        zarr_mask = open_ds(f"{zarr}/mask") ##change name if needed
+        zarr_mask = open_ds(f"{zarr}/labels_mask") ##change name if needed
         source_raw = gp.ArraySource( key= raw, array= zarr_raw, interpolatable= True)
         source_labels = gp.ArraySource( key= labels, array= zarr_labels, interpolatable= False)
         source_mask = gp.ArraySource( key= mask, array= zarr_mask, interpolatable= False)
         padding_amount = max(t[0] for t in neighborhood)*zarr_raw.voxel_size[0]
 
-        merged_sources = (source_raw , source_labels , source_mask) + gp.MergeProvider()+ gp.Pad(labels, size= (padding_amount,0,0)) + gp.Pad(mask, size= (padding_amount,0,0)) + gp.RandomLocation(min_masked=percent_covered,mask=mask)
+        merged_sources = (source_raw , source_labels , source_mask) + gp.MergeProvider()+ gp.Pad(labels, size= (padding_amount,0,0)) + gp.Pad(mask, size= (padding_amount,0,0)) + gp.RandomLocation()
 
         merged_src.append(merged_sources)
     merged_src = tuple(merged_src)
-    print(merged_src)
+    print("merged_src done!")
     # setting up normalization node
     normalization = gp.Normalize(array= raw)
 
@@ -94,7 +94,7 @@ def train(model: torch.nn.Module,
     intensity_augment = gp.IntensityAugment(array=raw, scale_min=0.9, scale_max=1.1, shift_min=-0.1, shift_max=0.1, z_section_wise=False, clip=True) # Please set z_section_wise according to your data set
 
     # setting up noise node
-    noise = gp.NoiseAugment(array=raw, mode='Gaussian', clip=True)
+    # noise = gp.NoiseAugment(array=raw, mode='Gaussian', clip=True)
 
     # setting up snapshot node
     snapshot = gp.Snapshot(every = snapshots_every,
@@ -119,29 +119,40 @@ def train(model: torch.nn.Module,
     ######################
     # SETTING UP PIPELINE #
     ######################
-
+    # print("beofre pipeline")
     pipeline = merged_src
+    # print("pipeline merge_src done!")
+
     pipeline += gp.RandomProvider()
+    # print("pipeline random provider  done!")
+
     pipeline += normalization 
-    pipeline += gp.SimpleAugment(transpose_only=[1,2]) 
+    pipeline += gp.SimpleAugment(transpose_only=[1,2], mirror_only=[1,2]) 
     pipeline += deform 
     pipeline += intensity_augment
-    pipeline += noise
+    # print("pipeline intensity augment  added!")
+    # pipeline += noise
+    pipeline += gp.PreCache(cache_size=32, num_workers=8)
     pipeline += add_affs
+    # print("pipeline add affinity done!")
+
     pipeline += balanced_labels 
     pipeline += gp.Unsqueeze([raw],0)
     pipeline += gp.Stack(batch_size) 
+    # print("pipeline before add train!")
+    pipeline += gp.PrintProfilingStats(every=1)
     pipeline += train 
-    pipeline += gp.Squeeze([raw,labels,mask, gt_affs,gt_affs_mask,prediction,aff_scale],0)
+    # print("pipeline after add train!")
+
+    # pipeline += gp.Squeeze([raw,labels,mask, gt_affs,gt_affs_mask,prediction,aff_scale],0)
     pipeline += snapshot
     
 
     # formulating a request for "raw"
     input_size = gp.Coordinate(input_size) * zarr_raw.voxel_size
     output_size = gp.Coordinate(output_size) * zarr_raw.voxel_size
-
+    print(f"Input size: {input_size}, Output size: {output_size}") 
     request = gp.BatchRequest()
-
     request.add(raw, input_size)
     request.add(labels, output_size)
     request.add(mask, output_size)
@@ -161,7 +172,10 @@ def train(model: torch.nn.Module,
         for i in range(iterations):
             # ...and request a batch
             print(".", end="")
+            print(f"Requesting batch at iteration {i}")
             batch = pipeline.request_batch(request)
+            print(f"Batch received at iteration {i}")
+
             if i%50==0:
                 print(f"Iteration {i}: {batch.loss}")
 
