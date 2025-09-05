@@ -4,6 +4,7 @@ import os
 import zarr
 from boundary_issues.evaluate import evaluate as evaluate_bi
 import sys
+import numpy as np
 
 from funlib import evaluate as evaluate_fl
 
@@ -29,6 +30,8 @@ def run_val_no_mask(prediction_arr, gt_arr):
 
     #####
     # Also check voi
+    pred_np_array = pred_np_array.astype(np.uint64)
+    gt_np_array = gt_np_array.astype(np.uint64)
     m = evaluate_fl.rand_voi(pred_np_array, gt_np_array)
     voi_merge = m['voi_merge']
     voi_split = m['voi_split']
@@ -73,6 +76,9 @@ def run_val_maskcrop(prediction_arr, gt_arr, mask_arr, offset = (15,31)):
 
     #####
     # Also check voi
+    adapted_pred = adapted_pred.astype(np.uint64)
+    gt_np_array = gt_np_array.astype(np.uint64)
+
     m = evaluate_fl.rand_voi(adapted_pred, gt_np_array)
     voi_merge = m['voi_merge']
     voi_split = m['voi_split']
