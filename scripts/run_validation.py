@@ -26,7 +26,7 @@ if __name__ == "__main__":
     pred_np = zarr.open(pred_path, mode='r')[:]
 
     # Apply mask and crop prediction to match GT shape
-    adapted_pred = pred_np[15:31,:,:] * mask_np
+    adapted_pred = pred_np[:gt_np.shape[0], :gt_np.shape[1], :gt_np.shape[2]] * mask_np
 
     # Evaluate
     metrics = evaluate(gt_np, adapted_pred)
