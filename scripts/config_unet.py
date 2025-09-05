@@ -14,7 +14,7 @@ model = torch.nn.Sequential(UNet(
     kernel_size_down=[[(1, 3, 3), (1, 3, 3)],[(1, 3, 3), (1, 3, 3)],[(3, 3, 3), (3, 3, 3)]],
     kernel_size_up=[[(3, 3, 3), (3, 3, 3),(3, 3, 3)],[(3, 3, 3), (3, 3, 3), (3, 3, 3)]],
     padding=("valid", "valid", "valid"),
-    voxel_size=(1000, 170, 170),
+    voxel_size=(300, 108, 108),
     fov=(1, 1, 1),  
     num_fmaps_out=None,
     constant_upsample=True
@@ -31,7 +31,7 @@ model = torch.nn.Sequential(UNet(
 # dummy_label = torch.from_numpy(dummy_label).to(device)
 
 # print(dummy_input.shape)
-# print(dummy_label.shape)
+# print(dummy_label.shape)gi
 
 # print(next(model.parameters()).device)
 

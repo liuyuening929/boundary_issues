@@ -6,6 +6,7 @@ import numpy as np
 import sys
 sys.path.append("src")   # add src/ to Python path
 from boundary_issues.loss import WeightedLoss
+from boundary_issues.nodes import PresetBalanceLabels
 
 def train(model: torch.nn.Module,
           loss: torch.nn.Module,
@@ -61,7 +62,7 @@ def train(model: torch.nn.Module,
     merged_src=[]
     for zarr in zarr_roots:
         zarr_raw = open_ds(f"{zarr}/raw") ##change name if needed
-        zarr_labels = open_ds(f"{zarr}/labels") ##change name if needed
+        zarr_labels = open_ds(f"{zarr}/label") ##change name if needed
         zarr_mask = open_ds(f"{zarr}/mask") ##change name if needed
         source_raw = gp.ArraySource( key= raw, array= zarr_raw, interpolatable= True)
         source_labels = gp.ArraySource( key= labels, array= zarr_labels, interpolatable= False)
@@ -113,8 +114,10 @@ def train(model: torch.nn.Module,
     )
 
     # setting up balanced labels node
-    balanced_labels=gp.BalanceLabels(gt_affs,scales=aff_scale, mask= gt_affs_mask)
-        
+    balanced_labels=PresetBalanceLabels(gt_affs,scales=aff_scale, weights =[.2,10], mask= gt_affs_mask)
+
+    #making it ignore unlabeled forground
+    reject_empty = gp.Reject(mask=labels, min_masked=0.00000001, reject_probability=1)  
 
     ######################
     # SETTING UP PIPELINE #
@@ -125,6 +128,7 @@ def train(model: torch.nn.Module,
     pipeline += normalization 
     pipeline += gp.SimpleAugment(transpose_only=[1,2]) 
     pipeline += deform 
+    pipeline += reject_empty
     pipeline += intensity_augment
     pipeline += noise
     pipeline += add_affs
